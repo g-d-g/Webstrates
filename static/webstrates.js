@@ -344,14 +344,6 @@ root.webstrates = (function(webstrates) {
 			webstrates.util.appendChildWithoutScriptExecution(targetElement,
 				jqml(doc.data, undefined, scripts));
 
-			// Add source maps to inlined scripts, so console errors will link properly.
-			scripts.forEach(function(script) {
-				if (!script.src) {
-					script.innerHTML += "\n//# sourceURL=main.js";
-				}
-			});
-
-			// And finally execute scripts.
 			webstrates.util.executeScripts(scripts, callback);
 		};
 
@@ -721,6 +713,8 @@ root.webstrates = (function(webstrates) {
 				var callbackLists = {
 					insertText: [],
 					deleteText: [],
+					nodeAdded: [],
+					nodeRemoved: [],
 					signal: []
 				};
 

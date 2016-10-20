@@ -92,7 +92,11 @@ root.webstrates = (function(webstrates) {
 			return;
 		}
 
+		// Insert new element into parent PathTree.
 		parentPathNode.children.splice(childIndex, 0, childPathNode);
+
+		// Notify nodeAdded listeners.
+		parentElement.webstrate.fireEvent("nodeAdded", newElement, false);
 	};
 
 	/**
@@ -113,13 +117,16 @@ root.webstrates = (function(webstrates) {
 
 		// And remove the actual DOM node.
 		childElement.remove();
+
+		// Notify nodeRemoved listeners.
+		parentElement.webstrate.fireEvent("nodeRemoved", childElement, false);
 	};
 
 	/**
 	 * Replace a node, either a tag name, list of attributes or a regular node.
 	 * Note that this is added for compatibility with a wider array of json0 operations such as those
 	 * used by Webstrates file system. Webstrates itself does not create these kinds of operations.
-	 * @param {DOMNode} rootElement    DOMNode used as root element for path navigation.
+	 * @param {DOMNode} rootElement   DOMNode used as root element for path navigation.
 	 * @param {DOMPath} path          Path to follow on DOMNode.
 	 * @param {mixed} value           Element to insert, new tag name, or new set of attributes.
 	 * @private
@@ -255,7 +262,7 @@ root.webstrates = (function(webstrates) {
 		});
 		parentElement.dispatchEvent(event);
 
-		// Send out new events.
+		// Notify insertText listeners.
 		parentElement.webstrate.fireEvent("insertText", charIndex, value, attributeName);
 	};
 
@@ -308,7 +315,7 @@ root.webstrates = (function(webstrates) {
 		});
 		parentElement.dispatchEvent(event);
 
-		// Send out new events.
+		// Notify deleteText listeners.
 		parentElement.webstrate.fireEvent("deleteText", charIndex, value, attributeName);
 
 		return newString;
